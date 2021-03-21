@@ -78,6 +78,16 @@ class JsonStreamEncoderTest extends TestCase
         });
     }
 
+    public function testCallable(): void
+    {
+        $callable = function () {
+            return self::HASH;
+        };
+        $expected = json_encode($callable());
+        $actual = $this->encoder->encodeAsString($callable);
+        $this->assertEquals($expected, $actual);
+    }
+
     private function testGenerator(callable $generatorFunction): void
     {
         $expected = json_encode(iterator_to_array($generatorFunction()));

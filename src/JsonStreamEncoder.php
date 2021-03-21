@@ -21,6 +21,10 @@ final class JsonStreamEncoder
 
     private function encodeValue($value): Generator
     {
+        if (is_callable($value)) {
+            yield from $this->encodeValue($value());
+            return;
+        }
         if (is_iterable($value)) {
             yield from $this->encodeIterable($value);
             return;
