@@ -30,7 +30,7 @@ class JsonRawListMerger implements JsonRawValueInterface
             if ($isFirst) {
                 yield JsonToken::LIST_OPEN;
                 $isFirst = false;
-            } elseif ($previousEmptyList) {
+            } elseif (!$previousEmptyList) {
                 yield JsonToken::COMMA;
             }
             yield substr($list, 1, -1);
@@ -53,8 +53,9 @@ class JsonRawListMerger implements JsonRawValueInterface
         }
     }
 
-    private function isEmptyList($list): bool
+    private function isEmptyList(string $list): bool
     {
-        return strlen(trim(substr($list, 1, -1))) < 1;
+        $listContent = substr($list, 1, -1);
+        return strlen(trim($listContent)) < 1;
     }
 }

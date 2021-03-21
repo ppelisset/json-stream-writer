@@ -46,8 +46,8 @@ class JsonRawListMergerTest extends TestCase
         $lists = [];
         for ($i = 0; $i < 3; $i++) {
             $current = [];
-            for ($i = 0; $i < 10; $i++) {
-                $current[] = ["time_" . $i => microtime()];
+            for ($y = 0; $y < 10; $y++) {
+                $current[] = ["time_" . $y => microtime()];
             }
             $lists[] = json_encode($current);
         }
