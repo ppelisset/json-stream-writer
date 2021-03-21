@@ -63,6 +63,9 @@ final class JsonStreamEncoder
             }
             yield from $this->encodeValue($value);
         }
+        if ($isFirstIteration) {
+            yield JsonToken::LIST_OPEN;
+        }
         yield $isList ? JsonToken::LIST_CLOSE : JsonToken::OBJECT_CLOSE;
     }
 }

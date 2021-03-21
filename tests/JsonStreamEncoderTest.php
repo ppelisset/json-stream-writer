@@ -34,6 +34,11 @@ class JsonStreamEncoderTest extends TestCase
         $this->assertEncodedJsonEquals('test');
     }
 
+    public function testEmptyListValue(): void
+    {
+        $this->assertEncodedJsonEquals([]);
+    }
+
     public function testArrayValue(): void
     {
         $this->assertEncodedJsonEquals(self::LIST);
