@@ -3,6 +3,7 @@
 namespace JsonStream\Tests;
 
 use Generator;
+use JsonStream\Helper\JsonRawValue;
 use JsonStream\JsonStreamEncoder;
 use PHPUnit\Framework\TestCase;
 
@@ -86,6 +87,14 @@ class JsonStreamEncoderTest extends TestCase
         $expected = json_encode($callable());
         $actual = $this->encoder->encodeAsString($callable);
         $this->assertEquals($expected, $actual);
+    }
+
+    public function testJsonRawValue(): void
+    {
+        $jsonRawValue = json_encode(self::HASH);
+        $expectedValue = json_encode(['hash' => self::HASH]);
+        $actualValue = $this->encoder->encodeAsString(['hash' => new JsonRawValue($jsonRawValue)]);
+        $this->assertEquals($expectedValue, $actualValue);
     }
 
     private function testGenerator(callable $generatorFunction): void

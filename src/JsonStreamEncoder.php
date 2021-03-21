@@ -21,12 +21,19 @@ final class JsonStreamEncoder
 
     private function encodeValue($value): Generator
     {
-        if (is_callable($value)) {
+        if (is_callable($value) && !is_string($value)) {
+            /** @var callable $value */
             yield from $this->encodeValue($value());
             return;
         }
         if (is_iterable($value)) {
+            /** @var iterable $value */
             yield from $this->encodeIterable($value);
+            return;
+        }
+        if ($value instanceof JsonRawValueInterface) {
+            /** @var JsonRawValueInterface $value */
+            yield from $value->getJson();
             return;
         }
         yield json_encode($value);
