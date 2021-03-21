@@ -33,9 +33,9 @@ class JsonRawListMergerTest extends TestCase
 
     private function testIsSameAfterDecoded(array $jsonLists)
     {
-        $expected = array_merge(...array_map(function ($json) {
+        $expected = count($jsonLists) > 0 ? array_merge(...array_map(function ($json) {
             return json_decode($json, true);
-        }, $jsonLists));
+        }, $jsonLists)) : [];
         $jsonRawListMerger = new JsonRawListMerger($jsonLists);
         $actual = json_decode($this->encoder->encodeAsString($jsonRawListMerger), true);
         $this->assertEquals($expected, $actual);
