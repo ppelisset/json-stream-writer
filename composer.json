@@ -1,0 +1,21 @@
+{
+  "name": "ppelisset/json-stream",
+  "description": "Library for stream json",
+  "autoload": {
+    "psr-4": {
+      "JsonStream\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "JsonStream\\Tests\\": "tests/"
+    }
+  },
+  "require": {
+    "php": ">=7.3",
+    "ext-json": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "8.5.*"
+  }
+}
