@@ -3,6 +3,7 @@
 namespace JsonStream\Tests;
 
 use Generator;
+use JsonSerializable;
 use JsonStream\Helper\JsonRawValue;
 use JsonStream\JsonStreamEncoder;
 use PHPUnit\Framework\TestCase;
@@ -97,6 +98,15 @@ class JsonStreamEncoderTest extends TestCase
         $this->assertEquals($expectedValue, $actualValue);
     }
 
+    public function testJsonSerializableObject(): void
+    {
+        $expected = json_encode(array_map(function (Generator $generator) {
+            return iterator_to_array($generator);
+        }, $this->buildJsonSerializableObject($this->buildListOfGenerator())->jsonSerialize()));
+        $actual = $this->encoder->encodeAsString($this->buildJsonSerializableObject($this->buildListOfGenerator()));
+        $this->assertEquals($expected, $actual);
+    }
+
     private function testGenerator(callable $generatorFunction): void
     {
         $expected = json_encode(iterator_to_array($generatorFunction()));
@@ -142,5 +152,22 @@ class JsonStreamEncoderTest extends TestCase
             'Gen2' => $this->buildGenerator(self::HASH),
             'Gen3' => $this->buildGenerator(self::LIST)
         ];
+    }
+
+    private function buildJsonSerializableObject($jsonValue): JsonSerializable
+    {
+        return new class($jsonValue) implements JsonSerializable {
+            private $jsonValue;
+
+            public function __construct($jsonValue)
+            {
+                $this->jsonValue = $jsonValue;
+            }
+
+            public function jsonSerialize()
+            {
+                return $this->jsonValue;
+            }
+        };
     }
 }

@@ -5,6 +5,7 @@ namespace JsonStream;
 
 
 use Generator;
+use JsonSerializable;
 
 final class JsonStreamEncoder
 {
@@ -21,6 +22,16 @@ final class JsonStreamEncoder
 
     private function encodeValue($value): Generator
     {
+        if ($value instanceof JsonRawValueInterface) {
+            /** @var JsonRawValueInterface $value */
+            yield from $value->getJson();
+            return;
+        }
+        if ($value instanceof JsonSerializable) {
+            /** @var JsonSerializable $value */
+            yield from $this->encodeValue($value->jsonSerialize());
+            return;
+        }
         if (is_callable($value) && !is_string($value)) {
             /** @var callable $value */
             yield from $this->encodeValue($value());
@@ -29,11 +40,6 @@ final class JsonStreamEncoder
         if (is_iterable($value)) {
             /** @var iterable $value */
             yield from $this->encodeIterable($value);
-            return;
-        }
-        if ($value instanceof JsonRawValueInterface) {
-            /** @var JsonRawValueInterface $value */
-            yield from $value->getJson();
             return;
         }
         yield json_encode($value);
